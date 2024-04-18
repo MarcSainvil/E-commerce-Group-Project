@@ -10,7 +10,6 @@ const NavbarContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  //padding: 0 20px;
   z-index: 100;
 
   .links {
@@ -77,8 +76,7 @@ const Navbar = () => {
       </div>
       <div className='links'>
         <Link to='/'>Home</Link>
-        <Link to='/about'>New Arrivals</Link>
-        <Link to='/projects'>Login</Link>
+        <Link to='/projects'>Products</Link>
         <Link to='/contact'>Cart</Link>
       </div>
     </NavbarContainer>
