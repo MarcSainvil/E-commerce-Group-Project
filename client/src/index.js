@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import App from './App';
 
 //context provider
-import { CartProvider } from './CartContext';
+import { CartProvider } from '../src/context/CartContext';
 
 ReactDOM.render(
   <React.StrictMode>

@@ -1,6 +1,22 @@
 import React from 'react';
 import styled from 'styled-components';
 
+const Home = () => {
+  return (
+    <HomeContainer>
+      <div className='hero'>
+        <h2>Hello, WELCOME TO TECH TROVE</h2>
+        <div className='prompt'>
+          <p>
+            DIVE, DIG and Grab your loot.
+          </p>
+      </div>
+      
+      </div>
+    </HomeContainer>
+  );
+};
+
 const HomeContainer = styled.div`
   width: 100%;
   align-items: center;
@@ -89,21 +105,4 @@ const HomeContainer = styled.div`
     }
   }
 `;
-
-const Home = () => {
-  return (
-    <HomeContainer>
-      <div className='hero'>
-        <h2>Hello, WELCOME TO TECH TROVE</h2>
-        <div className='prompt'>
-          <p>
-            DIVE, DIG and Grab your loot.
-          </p>
-      </div>
-      
-      </div>
-    </HomeContainer>
-  );
-};
-
 export default Home;
