@@ -1,8 +1,11 @@
-import { useState, useEffect } from "react";
+import { useState } from 'react';
+import { useCart } from './CartContext';
+import CartItem from './CartItem';
 import { useHistory } from 'react-router-dom';
 
 const Cart = () => {
-    const [cartItems, setCartItems] = useState([]);//??? 
+    const { cart } = useCart();
+    const { dispatch } = useCart();
     const history = useHistory();
 
     const [isLoading, setIsLoading] = useState(true);
@@ -13,22 +16,16 @@ const Cart = () => {
         fetch("/cart")
             .then(response => response.json())
             .then(data => {
-                setCartItems(data); 
+                dispatch({ type: 'SET_CART', payload: data });
                 setIsLoading(false); 
             })
             .catch(error => {
                 console.error('Error fetching data:', error);
                 setIsLoading(false); 
             });
-    }, []);
+    }, [dispatch]);
 
 //handlers
-
-    const removeItemFromCart = (index) => {
-        const newCartItems = [...cartItems];
-        newCartItems.splice(index, 1);
-        setCartItems(newCartItems);
-    };
 
     const handleAddMore = () => {
         // Navigate to the products page or home page
@@ -36,7 +33,7 @@ const Cart = () => {
     };
 
     const calculateTotalPrice = () => {
-        return cartItems.reduce((total, item) => total + item.price * item.quantity, 0).toFixed(2);
+        return cart.reduce((total, item) => total + item.price * item.quantity, 0).toFixed(2);
     };
 
 
@@ -48,7 +45,7 @@ const Cart = () => {
                     <p>Loading...</p>
                 ) : (
                     <div>
-                        {cartItems.length === 0 ? (
+                        {cart.length === 0 ? (
                             <div>
                                 <h2>Your cart is empty now!</h2>
                                 <p>Dive in our TROVE, get what you like! </p>
@@ -57,14 +54,9 @@ const Cart = () => {
                         ) : (
                             <div>
                                 <ul>
-                                    {cartItems.map((item, index) => (
-                                        <li key={index}>
-                                            <img src={item.imageSrc} alt={item.name} />
-                                            <div>
-                                                <h3>{item.name}</h3>
-                                                <p>Price: ${item.price}</p>
-                                                <button onClick={() => removeItemFromCart(index)}>Remove</button>
-                                            </div>
+                                    {cart.map((item) => (
+                                        <li key={item.id}>
+                                            <CartItem item={item} />
                                         </li>
                                     ))}
                                 </ul>
@@ -72,6 +64,8 @@ const Cart = () => {
                                 <button onClick={handleAddMore}>Continue Shopping</button>
 
                                 <p>Total: ${calculateTotalPrice()}</p>
+
+                                <button>Proceed to Checkout</button>
                             </div>
                         )}
                     </div>

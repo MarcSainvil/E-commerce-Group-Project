@@ -75,9 +75,9 @@ const Navbar = () => {
         </button>
       </div>
       <div className='links'>
-        <Link to='/'>Home</Link>
-        <Link to='/projects'>Products</Link>
-        <Link to='/contact'>Cart</Link>
+        <a href="#home">Home</a>
+        <a href="#products">Products</a>
+        <Link to='/cart'>Cart</Link>
       </div>
     </NavbarContainer>
   );
