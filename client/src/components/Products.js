@@ -1,25 +1,48 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 
+const Products = () => {
+  const [products, setProducts] = useState([]);
+  const [error, setError] = useState('');
 
+  // Fetching products
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const response = await fetch('http://localhost:4000/api/items');
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        const data = await response.json();
+        setProducts(data);
+      } catch (error) {
+        setError('Failed to fetch products: ' + error.message);
+      }
+    };
 
+    fetchProducts();
+  }, []);
 
-const Products = () => (
-  <ProductsContainer>
-    <h1 className='productTitle'>Our Products</h1>
-    
-    <div className='productList'>
-      <ProductItem>
-        
-      </ProductItem>
-      
-      <ProductItem>
-      
-      </ProductItem>
-    
-    </div>
-  </ProductsContainer>
-);
+  // JSX Template
+  return (
+    <ProductsContainer>
+      <h1 className='productTitle'>Our Products</h1>
+      <div className='productList'>
+        {products.length > 0 ? (
+          products.map(product => (
+            <ProductItem key={product._id} onClick={() => console.log("Clicked", product._id)}>
+              <div className="bgImage" style={{ backgroundImage: `url(${product.imageSrc})` }}></div>
+              <h1>{product.name}</h1>
+              <p>{product.price}</p>
+            </ProductItem>
+          ))
+        ) : (
+          <p>{error || "Loading..."}</p>
+        )}
+      </div>
+    </ProductsContainer>
+  );
+};
 
 const ProductsContainer = styled.div`
   width: 100%;
@@ -28,19 +51,13 @@ const ProductsContainer = styled.div`
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  font-family: "Jersey 10", sans-serif;
-      font-weight: 400;
-      font-style: normal;
-  
+  font-family: 'Poppins', sans-serif;
 
   .productTitle {
     text-align: center;
     color: #27282b;
     font-size: 50px;
-
-    font-family: "Jersey 10", sans-serif;
-      font-weight: 400;
-      font-style: normal;
+    font-family: 'Poppins', sans-serif;
   }
 
   .productList {
@@ -57,9 +74,6 @@ const ProductsContainer = styled.div`
 
     @media only screen and (max-width: 800px) {
       grid-template-columns: 1fr;
-    }
-
-    @media only screen and (max-width: 800px) {
       width: 100%;
     }
   }
@@ -73,6 +87,10 @@ const ProductItem = styled.div`
   box-shadow: 0px 3px 15px rgba(0, 0, 0, 0.2);
   text-align: center;
   transition: box-shadow 0.3s ease-in;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 20px;
 
   &:hover {
     box-shadow: 0px 3px 15px rgba(0, 0, 0, 0.5);
@@ -91,6 +109,13 @@ const ProductItem = styled.div`
 
   h1 {
     font-size: 25px;
+    margin-top: 20px;
+    font-family: 'Poppins', sans-serif;
+  }
+
+  p {
+    font-size: 20px;
+    color: #333;
     font-family: 'Poppins', sans-serif;
   }
 `;
