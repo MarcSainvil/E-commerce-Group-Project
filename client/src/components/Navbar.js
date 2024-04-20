@@ -3,10 +3,35 @@ import { Link, useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 import ReorderIcon from '@material-ui/icons/Reorder';
 
+const Navbar = () => {
+  const [expanded, setExpanded] = useState(false);
+  const location = useLocation();
+
+  useEffect(() => {
+    setExpanded(false);
+  }, [location]);
+
+  return (
+    <NavbarContainer expanded={expanded}>
+      <div className='toggleButton'>
+        <button onClick={() => setExpanded((prev) => !prev)}>
+          <ReorderIcon />
+        </button>
+      </div>
+      <div className='links'>
+        <Link to="/">Home</Link> {/* Points to the main page */}
+        <Link to="/#products">Products</Link> {/* Points to the products section on the main page */}
+        <Link to='/cart'>Cart</Link> {/* Points to a separate cart page */}
+      </div>
+    </NavbarContainer>
+  );
+};
+
 const NavbarContainer = styled.div`
   width: 100%;
   height: 100px;
-  background: #38393d;
+  position: fixed;
+  background: skyblue;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -15,12 +40,16 @@ const NavbarContainer = styled.div`
   .links {
     display: flex;
     align-items: center;
+    font-family: "Libre Barcode 39 Text", system-ui;
+   
+    font-style: normal;
+
 
     a {
       color: white;
       text-decoration: none;
       margin: 0 15px;
-      font-size: 18px;
+      font-size: 28px;
     }
   }
 
@@ -58,29 +87,5 @@ const NavbarContainer = styled.div`
     }
   }
 `;
-
-const Navbar = () => {
-  const [expanded, setExpanded] = useState(false);
-  const location = useLocation();
-
-  useEffect(() => {
-    setExpanded(false);
-  }, [location]);
-
-  return (
-    <NavbarContainer expanded={expanded}>
-      <div className='toggleButton'>
-        <button onClick={() => setExpanded((prev) => !prev)}>
-          <ReorderIcon />
-        </button>
-      </div>
-      <div className='links'>
-        <a href="#home">Home</a>
-        <a href="#products">Products</a>
-        <Link to='/cart'>Cart</Link>
-      </div>
-    </NavbarContainer>
-  );
-};
 
 export default Navbar;

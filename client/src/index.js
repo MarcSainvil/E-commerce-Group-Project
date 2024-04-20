@@ -1,17 +1,17 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+import { createRoot } from 'react-dom/client';
 import App from './App';
 
-//context provider
-import { CartProvider } from '../src/context/CartContext';
+// Context provider
+import { CartProvider } from './context/CartContext'; // Adjust the import path if necessary
 
-ReactDOM.render(
+const container = document.getElementById('root');
+const root = createRoot(container); // Create a root.
+
+root.render(
   <React.StrictMode>
     <CartProvider>
-
-    <App />
-    
+      <App />
     </CartProvider>
-  </React.StrictMode>,
-  document.getElementById('root')
+  </React.StrictMode>
 );

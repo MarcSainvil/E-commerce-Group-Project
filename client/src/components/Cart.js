@@ -1,46 +1,37 @@
-import { useState } from 'react';
-import { useCart } from './CartContext';
+import { useState, useEffect } from 'react';
+import { useCart } from '../context/CartContext';  // Adjust this path as necessary
 import CartItem from './CartItem';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 const Cart = () => {
-    const { cart } = useCart();
-    const { dispatch } = useCart();
-    const history = useHistory();
-
+    const { cart, dispatch } = useCart();
+    const navigate = useNavigate();
     const [isLoading, setIsLoading] = useState(true);
 
-
     useEffect(() => {
-        
         fetch("/cart")
             .then(response => response.json())
             .then(data => {
                 dispatch({ type: 'SET_CART', payload: data });
-                setIsLoading(false); 
+                setIsLoading(false);
             })
             .catch(error => {
                 console.error('Error fetching data:', error);
-                setIsLoading(false); 
+                setIsLoading(false);
             });
     }, [dispatch]);
 
-//handlers
-
     const handleAddMore = () => {
-        // Navigate to the products page or home page
-        history.push('/products'); //actual links later need doublecheck!
+        navigate('/products');
     };
 
     const calculateTotalPrice = () => {
         return cart.reduce((total, item) => total + item.price * item.quantity, 0).toFixed(2);
     };
 
-
-//show on web
     return(
         <main>
-        <div>
+            <div>
                 {isLoading ? (
                     <p>Loading...</p>
                 ) : (
@@ -60,20 +51,16 @@ const Cart = () => {
                                         </li>
                                     ))}
                                 </ul>
-
                                 <button onClick={handleAddMore}>Continue Shopping</button>
-
                                 <p>Total: ${calculateTotalPrice()}</p>
-
                                 <button>Proceed to Checkout</button>
                             </div>
                         )}
                     </div>
                 )}
             </div>
-
         </main>
-    )
-}
+    );
+};
 
 export default Cart;

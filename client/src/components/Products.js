@@ -28,7 +28,9 @@ const ProductsContainer = styled.div`
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  font-family: 'Poppins', sans-serif;
+  font-family: "Jersey 10", sans-serif;
+      font-weight: 400;
+      font-style: normal;
   
 
   .productTitle {
@@ -36,7 +38,9 @@ const ProductsContainer = styled.div`
     color: #27282b;
     font-size: 50px;
 
-    font-family: 'Poppins', sans-serif;
+    font-family: "Jersey 10", sans-serif;
+      font-weight: 400;
+      font-style: normal;
   }
 
   .productList {
