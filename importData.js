@@ -8,6 +8,7 @@ const dbName = process.env.DB_NAME;
 const client = new MongoClient(url);
 
 async function loadData(collectionName, fileName) {
+    // Path to files
     const filePath = path.join('server', 'data', fileName);
     const data = JSON.parse(fs.readFileSync(filePath, 'utf8'));
     const db = client.db(dbName);
@@ -22,9 +23,12 @@ async function loadData(collectionName, fileName) {
     }
 }
 
+// Loading data into collections
 async function main() {
     try {
+        // Load data into 'companies' collection from 'companies.json'
         await loadData('companies', 'companies.json');
+        // Load data into 'items' collection from 'items.json'
         await loadData('items', 'items.json');
     } catch (err) {
         console.error('An error occurred:', err);
