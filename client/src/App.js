@@ -1,22 +1,28 @@
-import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Home from './components/Home';
 import Products from './components/Products';
-//import Navbar from "./components/Navbar";
-//import Cart from './components/Cart';
-
+import Navbar from "./components/Navbar";
+import Cart from './components/Cart';
 
 const App = () => (
+  <Router>
     <div className="App">
-        <div>
+      <Navbar />
+      <Routes>
+        <Route path="/" element={
+          <div>
             <section id="home">
-                <Home />
+              <Home />
             </section> 
             <section id="products">
-                <Products />
+              <Products />
             </section>
-        </div>
-
+          </div>
+        }/>
+        <Route path="/cart" element={<Cart />} />
+      </Routes>
     </div>
+  </Router>
 );
 
 

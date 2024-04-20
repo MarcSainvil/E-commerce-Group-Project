@@ -8,7 +8,7 @@ const Home = () => {
         <h2>Hello, WELCOME TO TECH TROVE</h2>
         <div className='prompt'>
           <p>
-            DIVE, DIG and Grab your loot.
+          
           </p>
       </div>
       
@@ -21,7 +21,7 @@ const HomeContainer = styled.div`
   width: 100%;
   align-items: center;
   font-family: 'Poppins', sans-serif;
-  color: #27282b;
+  color: gold;
 
   .hero {
     width: 100%;
@@ -31,14 +31,16 @@ const HomeContainer = styled.div`
     justify-content: center;
     align-items: center;
     text-align: center;
-    background-color: #27282b;
+    background-color: skyblue;
     color: #f0f0f0;
     position: relative;
 
     h2 {
-      font-family: 'Poppins', sans-serif;
+      font-family: "Jersey 10", sans-serif;
+      font-weight: 400;
+      font-style: normal;
       font-size: 80px;
-      color: pink;
+      color: sandybrown;
       height: 50px;
       margin-top: 50px;
       @media (max-width: 800px){ 
