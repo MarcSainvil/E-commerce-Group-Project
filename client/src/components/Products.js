@@ -28,31 +28,61 @@ const Products = () => {
   }, []);
 
   //handlers
-  const addItemToCart = (item) => {
-    dispatch({type:"ADD_ITEM", payload: item._id});
-  }
+  const addToCart = async (productId, name, price, quantity) => {
+    try {
+      const response = await fetch('http://localhost:4000/api/cart/add', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ productId, name, price, quantity }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to add item to cart');
+      }
+
+      // Update cart state
+      dispatch({ type: 'ADD_ITEM', payload: { productId, name, price, quantity } });
+    } catch (error) {
+      console.error('Error adding item to cart:', error);
+    }
+  };
+  
 
   // JSX Template
   return (
     <ProductsContainer>
-      <h1 className='productTitle'>Our Loot</h1>
+      <h1 className='productTitle'>Our Products</h1>
       <div className='productList'>
         {products.length > 0 ? (
           products.map(product => (
-            <ProductItem key={product._id} onClick={() => console.log("Clicked", product._id)}>
+            <ProductItem key={product._id} >
               <div className="bgImage" style={{ backgroundImage: `url(${product.imageSrc})` }}></div>
               <h1>{product.name}</h1>
+              
               <p>{product.price}</p>
 
-              <button onClick={addItemToCart}>Add to Cart</button>
+              <button onClick={() => { 
+                console.log('Adding to cart:', {
+                  productId: product._id,
+                  name: product.name,
+                  price: product.price,
+                  quantity: 1
+                });
+                addToCart(product._id, product.name, product.price, 1)}
+            }>Add to Cart</button>
             </ProductItem>
+            
           ))
         ) : (
           <p>{error || "Loading..."}</p>
         )}
       </div>
     </ProductsContainer>
+    
   );
+  
 };
 
 const ProductsContainer = styled.div`

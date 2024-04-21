@@ -1,75 +1,91 @@
 import { useState, useEffect } from 'react';
-import { useCart } from '../context/CartContext';  // Adjust this path as necessary
+import { useCart } from '../context/CartContext';
 import CartItem from './CartItem';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
 const Cart = () => {
-    const { cart, dispatch } = useCart();
+    const { cart } = useCart();
+    const { dispatch } = useCart();
     const navigate = useNavigate();
+
     const [isLoading, setIsLoading] = useState(true);
 
+
     useEffect(() => {
-        fetch("/cart")
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                return response.json();
-            })
-            .then(data => {
+        const fetchData = async () => {
+            try {
+                const response = await fetch("/api/cart");
+                
+                const data = await response.json();
                 dispatch({ type: 'SET_CART', payload: data });
-                setIsLoading(false);
-            })
-            .catch(error => {
+                setIsLoading(false); 
+            } catch (error) {
                 console.error('Error fetching data:', error);
-                setIsLoading(false);
-            });
+                setIsLoading(false); 
+            }
+        };
+    
+        fetchData();
     }, [dispatch]);
 
+//handlers
+
     const handleAddMore = () => {
-        navigate('/#products');
+        // Navigate to the products page or home page
+        navigate('/#products');; //actual links later need doublecheck!
     };
 
     const calculateTotalPrice = () => {
         return cart.reduce((total, item) => total + item.price * item.quantity, 0).toFixed(2);
     };
 
-    return (
-        <Main>
-            <div>
+
+//show on web
+    return(
+        <main>
+        <div>
                 {isLoading ? (
                     <p>Loading...</p>
                 ) : (
                     <div>
                         {cart.length === 0 ? (
-                            <CartContainer>
+                            <div>
                                 <h2>Your cart is empty now!</h2>
                                 <p>Dive in our TROVE, get what you like! </p>
-                                <StyledButton onClick={handleAddMore}>Go Shopping →</StyledButton>
-                            </CartContainer>
+                                <button onClick={handleAddMore}>Go Shopping</button>
+                            </div>
                         ) : (
-                            <CartContainer>
+                            <div>
                                 <ul>
-                                    {cart.map((item) => (
-                                        <li key={item._id}>
-                                            <CartItem item={item} />
+                                    {cart.map((product) => {
+                                        console.log(product._id); 
+                                        return (
+                                        <li key={product._id}>
+                                            
+                                            <CartItem product={product} />
                                         </li>
-                                    ))}
+                                        );
+                                   })}
                                 </ul>
+
                                 <button onClick={handleAddMore}>Continue Shopping</button>
+
                                 <p>Total: ${calculateTotalPrice()}</p>
-                                <StyledButton>Proceed to Checkout</StyledButton>
-                            </CartContainer>
+
+                                <button>Proceed to Checkout</button>
+                            </div>
                         )}
                     </div>
                 )}
             </div>
-        </Main>
-    );
+
+        </main>
+    )
 };
 
 export default Cart;
+
 
 const Main = styled.main`
     background-color: skyblue;
