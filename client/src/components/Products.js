@@ -26,7 +26,7 @@ const Products = () => {
   // JSX Template
   return (
     <ProductsContainer>
-      <h1 className='productTitle'>Our Products</h1>
+      <h1 className='productTitle'>Our Loot</h1>
       <div className='productList'>
         {products.length > 0 ? (
           products.map(product => (
