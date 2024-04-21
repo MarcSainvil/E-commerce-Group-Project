@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 
+//Top banner function to show our title
 const Home = () => {
   return (
     <HomeContainer>
