@@ -3,14 +3,18 @@ import { Link, useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 import ReorderIcon from '@material-ui/icons/Reorder';
 
+// Defines a navigation bar component
 const Navbar = () => {
+  // tracks whether the navigation links are showing (expanded) or hidden
   const [expanded, setExpanded] = useState(false);
   const location = useLocation();
 
+  // React hook that closes the navigation menu when the route changes
   useEffect(() => {
     setExpanded(false);
   }, [location]);
 
+//render navbar
   return (
     <NavbarContainer expanded={expanded}>
       <div className='toggleButton'>
@@ -28,6 +32,7 @@ const Navbar = () => {
 };
 
 const NavbarContainer = styled.div.withConfig({
+  // Function to filter out the 'expanded' prop from being passed to the DOM element and styling component for Navbar
   shouldForwardProp: (prop) => !['expanded'].includes(prop),
 })`
   width: 100%;
