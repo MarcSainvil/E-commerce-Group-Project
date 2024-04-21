@@ -35,6 +35,7 @@ MongoClient.connect(dbUrl)
         process.exit(1);
     });
 
+// API endpoint to get all items from the 'items' collection    
 app.get('/api/items', async (req, res) => {
     try {
         const items = await db.collection('items').find().toArray();
@@ -44,6 +45,7 @@ app.get('/api/items', async (req, res) => {
     }
 });
 
+// API endpoint to get all items from the 'cart' collection
 app.get('/api/cart', async (req, res) => {
     try {
         const cartItems = await db.collection('cart').find().toArray();
@@ -53,6 +55,7 @@ app.get('/api/cart', async (req, res) => {
     }
 });
 
+// API endpoint to add an item to the 'cart' collection
 app.post('/api/cart/add', async (req, res) => {
     try {
         const { productId, name, price, quantity } = req.body;
@@ -75,6 +78,7 @@ app.post('/api/cart/add', async (req, res) => {
     }
 });
 
+// API endpoint to handle the checkout process
 app.post('/api/checkout', async (req, res) => {
   const session = client.startSession();
   try {
@@ -82,6 +86,7 @@ app.post('/api/checkout', async (req, res) => {
       const cartItems = await db.collection('cart').find().toArray();
       
       for (let item of cartItems) {
+          // Check to update the stock for each item
           const updateResult = await db.collection('items').updateOne(
               { _id: item.productId, numInStock: { $gte: item.quantity } },
               { $inc: { numInStock: -item.quantity } },
@@ -95,6 +100,7 @@ app.post('/api/checkout', async (req, res) => {
           }
       }
 
+      // Clear the cart after successful stock update
       await db.collection('cart').deleteMany({}, { session });
       await session.commitTransaction();
       session.endSession();

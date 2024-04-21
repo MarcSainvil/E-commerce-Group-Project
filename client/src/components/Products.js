@@ -3,10 +3,12 @@ import styled from 'styled-components';
 import { useCart } from "../context/CartContext";
 
 const Products = () => {
+  // State hooks to store products and error messages
     const [products, setProducts] = useState([]);
     const [error, setError] = useState('');
     const { dispatch } = useCart();
 
+    // Fetch products from the server when the component mounts
     useEffect(() => {
         const fetchProducts = async () => {
             try {
@@ -23,6 +25,7 @@ const Products = () => {
         fetchProducts();
     }, []);
 
+    // Function to handle adding items to the cart
     const addToCart = async (productId, name, price, quantity, event) => {
       event.preventDefault();
       event.stopPropagation();
@@ -41,6 +44,7 @@ const Products = () => {
       }
   };
 
+    // Render the products on the page
     return (
         <ProductsContainer>
             <h1 className='productTitle'>Our Products</h1>

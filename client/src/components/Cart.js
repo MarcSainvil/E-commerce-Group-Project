@@ -9,6 +9,7 @@ const Cart = () => {
     const navigate = useNavigate();
     const [isLoading, setIsLoading] = useState(true);
 
+    // Fetch cart data when the component mounts
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -28,10 +29,12 @@ const Cart = () => {
         fetchData();
     }, [dispatch]);
 
+    // Redirect to product list when "add more items" button is clicked
     const handleAddMore = () => {
         navigate('/#products');
     };
 
+    // Calculate total price of items in the cart
     const calculateTotalPrice = () => {
         return cart.reduce((total, item) => {
             // Remove the currency symbol and parse the price string into a float
@@ -46,6 +49,7 @@ const Cart = () => {
         }, 0).toFixed(2);
     };
 
+    // Handle the checkout process
     const handleCheckout = async () => {
       try {
         const response = await fetch('/api/checkout', {
@@ -66,6 +70,7 @@ const Cart = () => {
       }
     };
 
+    // Render the cart page
     return (
         <Main>
             <div>
