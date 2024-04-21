@@ -16,8 +16,10 @@ const cartReducer = (state, action) => {
             }
         return item;
         });
-    default:
-        return state;
+    case 'CLEAR_CART':
+        return [];  // Clear the cart
+        default:
+            return state;
     }
 };
 
