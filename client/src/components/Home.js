@@ -25,7 +25,7 @@ const HomeContainer = styled.div`
 
   .hero {
     width: 100%;
-    height: calc(100vh - 100px);
+    height: calc(50vh - 100px);
     display: flex;
     flex-direction: column;
     justify-content: center;
