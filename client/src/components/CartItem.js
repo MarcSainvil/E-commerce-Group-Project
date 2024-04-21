@@ -5,24 +5,22 @@ const CartItem = ({ product }) => {
     const { dispatch } = useCart();
 
     const handleRemoveItem = () => {
-    dispatch({ type: 'REMOVE_ITEM', payload: { id: product.id } });
+        dispatch({ type: 'REMOVE_ITEM', payload: { id: product.productId } });
     };
 
     const handleQuantityChange = (e) => {
         const quantity = parseInt(e.target.value);
-        dispatch({ type: 'UPDATE_QUANTITY', payload: { id: product.id, quantity } });
+        dispatch({ type: 'UPDATE_QUANTITY', payload: { id: product.productId, quantity } });
     };
 
     return (
-    <div style={{ backgroundImage: `url(${product.imageSrc})` }}>
-        
-        <p>{product.name} - {product.price}</p>
-        <input type="number" value={product.quantity} onChange={handleQuantityChange} />
-        <button onClick={handleRemoveItem}>Remove</button>
-    </div>
+        <div>
+            <img src={product.imageSrc} alt={product.name} />
+            <p>{product.name} - ${product.price}</p>
+            <input type="number" value={product.quantity} onChange={handleQuantityChange} />
+            <button onClick={handleRemoveItem}>Remove</button>
+        </div>
     );
-    };
+};
 
 export default CartItem;
-
-//<img src={product.imageSrc} alt={product.name} />

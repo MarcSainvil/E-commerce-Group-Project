@@ -10,85 +10,99 @@ const app = express();
 
 app.use(morgan('tiny'));
 app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+app.use(express.urlencoded({ extended: true }));
 
 app.use(function(req, res, next) {
-  res.header('Access-Control-Allow-Origin', '*');
-  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
-  res.header('Access-Control-Allow-Methods', 'OPTIONS, HEAD, GET, PUT, POST, DELETE');
-  next();
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+    res.header('Access-Control-Allow-Methods', 'OPTIONS, HEAD, GET, PUT, POST, DELETE');
+    next();
 });
 
-// MongoDB connection
 const dbUrl = process.env.DB_URL;
-if (!dbUrl) {
-  console.error('Database URL is not defined in .env file');
-  process.exit(1);
-}
-
-let db;
+let db, client;
 
 MongoClient.connect(dbUrl)
-  .then(client => {
-    console.log('Connected to Database');
-    db = client.db('ecommerce');
-
-    // Start the application after the database connection is ready
-    app.listen(PORT, () => {
-      console.log(`Server running on port ${PORT}`);
+    .then(conn => {
+        client = conn;
+        db = client.db('ecommerce');
+        app.listen(PORT, () => {
+            console.log(`Server running on port ${PORT}`);
+        });
+    })
+    .catch(err => {
+        console.error('Failed to connect to MongoDB:', err);
+        process.exit(1);
     });
-  })
-  .catch(err => {
-    console.error('Failed to connect to MongoDB:', err);
-    process.exit(1);
-  });
 
-// Endpoints
 app.get('/api/items', async (req, res) => {
-  try {
-    const items = await db.collection('items').find().toArray();
-    res.status(200).json(items);
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-
+    try {
+        const items = await db.collection('items').find().toArray();
+        res.status(200).json(items);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
 });
-//handlers
+
 app.get('/api/cart', async (req, res) => {
-  try {
-    // Query the cart collection to retrieve all cart items
-    const cartItems = await db.collection('cart').find().toArray();
-    res.status(200).json(cartItems);
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
+    try {
+        const cartItems = await db.collection('cart').find().toArray();
+        res.status(200).json(cartItems);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
 });
 
 app.post('/api/cart/add', async (req, res) => {
-  try {
-    const { productId, name, price, quantity } = req.body;
-    const cartItem = {
-      productId,
-      name,
-      price,
-      quantity,
-    };
-
-    // Check if 'cart' collection exists, if not, create it
-    const collectionExists = await db.listCollections({ name: 'cart' }).hasNext();
-    if (!collectionExists) {
-      await db.createCollection('cart');
-      console.log('Created cart collection');
+    try {
+        const { productId, name, price, quantity } = req.body;
+        const itemId = parseInt(productId);
+        const existingCartItem = await db.collection('cart').findOne({ productId: itemId });
+        if (existingCartItem) {
+            await db.collection('cart').updateOne({ productId: itemId }, { $inc: { quantity: quantity } });
+        } else {
+            const cartItem = {
+                productId: itemId,
+                name,
+                price,
+                quantity,
+            };
+            await db.collection('cart').insertOne(cartItem);
+        }
+        res.status(201).json({ message: 'Item added to cart successfully' });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
     }
+});
 
-    // Insert the cart item into the collection
-    await db.collection('cart').insertOne(cartItem);
+app.post('/api/checkout', async (req, res) => {
+  const session = client.startSession();
+  try {
+      await session.startTransaction();
+      const cartItems = await db.collection('cart').find().toArray();
+      
+      for (let item of cartItems) {
+          const updateResult = await db.collection('items').updateOne(
+              { _id: item.productId, numInStock: { $gte: item.quantity } },
+              { $inc: { numInStock: -item.quantity } },
+              { session }
+          );
 
-    // Query the collection to retrieve the inserted cart item
-    const addedCartItem = await db.collection('cart').findOne(cartItem);
+          if (updateResult.matchedCount === 0 || updateResult.modifiedCount === 0) {
+              await session.abortTransaction();
+              session.endSession();
+              return res.status(400).json({ message: 'Insufficient stock for item ID: ' + item.productId });
+          }
+      }
 
-    res.status(201).json({ message: 'Item added to cart successfully', cartItem: addedCartItem });
-  } catch (err) {
-    res.status(500).json({ error: err.message });
+      await db.collection('cart').deleteMany({}, { session });
+      await session.commitTransaction();
+      session.endSession();
+      res.status(200).json({ message: 'Checkout successful, cart cleared.' });
+  } catch (error) {
+      console.error('Checkout failed:', error);
+      await session.abortTransaction();
+      session.endSession();
+      res.status(500).json({ error: 'Checkout transaction failed: ' + error.message });
   }
 });
