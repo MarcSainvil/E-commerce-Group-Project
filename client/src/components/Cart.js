@@ -11,7 +11,12 @@ const Cart = () => {
 
     useEffect(() => {
         fetch("/cart")
-            .then(response => response.json())
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
             .then(data => {
                 dispatch({ type: 'SET_CART', payload: data });
                 setIsLoading(false);
@@ -30,7 +35,7 @@ const Cart = () => {
         return cart.reduce((total, item) => total + item.price * item.quantity, 0).toFixed(2);
     };
 
-    return(
+    return (
         <Main>
             <div>
                 {isLoading ? (
@@ -65,26 +70,27 @@ const Cart = () => {
 };
 
 export default Cart;
+
 const Main = styled.main`
-background-color:skyblue;
-color: white;
-height:100vh;
+    background-color: skyblue;
+    color: white;
+    height: 100vh;
 `;
 
 const CartContainer = styled.div`
-padding: 100px 50px;
-font-family: 'Franklin Gothic Medium';
-width:100vw;
+    padding: 100px 50px;
+    font-family: 'Franklin Gothic Medium';
+    width: 100vw;
 `;
 
 const StyledButton = styled.button`
-font-family: "Jersey 10", sans-serif;
-border: solid 2px;
-border-radius: 30px;
-background-color:skyblue;
-color:gold;
-font-size:24px;
-padding:20px;
-float:right;
-margin-right:10%;
-`
+    font-family: "Jersey 10", sans-serif;
+    border: solid 2px;
+    border-radius: 30px;
+    background-color: skyblue;
+    color: gold;
+    font-size: 24px;
+    padding: 20px;
+    float: right;
+    margin-right: 10%;
+`;

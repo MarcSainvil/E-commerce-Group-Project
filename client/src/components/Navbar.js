@@ -27,7 +27,9 @@ const Navbar = () => {
   );
 };
 
-const NavbarContainer = styled.div`
+const NavbarContainer = styled.div.withConfig({
+  shouldForwardProp: (prop) => !['expanded'].includes(prop),
+})`
   width: 100%;
   height: 100px;
   position: fixed;
@@ -41,9 +43,7 @@ const NavbarContainer = styled.div`
     display: flex;
     align-items: center;
     font-family: "Libre Barcode 39 Text", system-ui;
-   
     font-style: normal;
-
 
     a {
       color: white;
@@ -67,7 +67,7 @@ const NavbarContainer = styled.div`
 
   @media only screen and (max-width: 600px) {
     .links {
-      display: ${(props) => (props.expanded ? 'flex' : 'none')};
+      display: ${props => props.expanded ? 'flex' : 'none'};
       flex-direction: column;
       position: absolute;
       top: 100px;
