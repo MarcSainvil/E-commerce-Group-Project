@@ -32,7 +32,17 @@ const Cart = () => {
     };
 
     const calculateTotalPrice = () => {
-        return cart.reduce((total, item) => total + parseFloat(item.price) * item.quantity, 0).toFixed(2);
+        return cart.reduce((total, item) => {
+            // Remove the currency symbol and parse the price string into a float
+            const price = parseFloat(item.price.replace('$', ''));
+            const quantity = parseInt(item.quantity);
+            if (!isNaN(price) && !isNaN(quantity)) {
+                return total + (price * quantity);
+            } else {
+                console.error('Invalid price or quantity:', item);
+                return total;
+            }
+        }, 0).toFixed(2);
     };
 
     const handleCheckout = async () => {
@@ -51,7 +61,7 @@ const Cart = () => {
         dispatch({ type: 'CLEAR_CART' });
       } catch (error) {
         console.error('Error during checkout:', error);
-        alert('Error during checkout: ' + error.message);
+        alert('Out of Stock: ' + error.message);
       }
     };
 
