@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useCart } from '../context/CartContext';  // Adjust this path as necessary
 import CartItem from './CartItem';
 import { useNavigate } from 'react-router-dom';
+import styled from 'styled-components';
 
 const Cart = () => {
     const { cart, dispatch } = useCart();
@@ -22,7 +23,7 @@ const Cart = () => {
     }, [dispatch]);
 
     const handleAddMore = () => {
-        navigate('/products');
+        navigate('/#products');
     };
 
     const calculateTotalPrice = () => {
@@ -30,37 +31,60 @@ const Cart = () => {
     };
 
     return(
-        <main>
+        <Main>
             <div>
                 {isLoading ? (
                     <p>Loading...</p>
                 ) : (
                     <div>
                         {cart.length === 0 ? (
-                            <div>
+                            <CartContainer>
                                 <h2>Your cart is empty now!</h2>
                                 <p>Dive in our TROVE, get what you like! </p>
-                                <button onClick={handleAddMore}>Go Shopping</button>
-                            </div>
+                                <StyledButton onClick={handleAddMore}>Go Shopping →</StyledButton>
+                            </CartContainer>
                         ) : (
-                            <div>
+                            <CartContainer>
                                 <ul>
                                     {cart.map((item) => (
-                                        <li key={item.id}>
+                                        <li key={item._id}>
                                             <CartItem item={item} />
                                         </li>
                                     ))}
                                 </ul>
                                 <button onClick={handleAddMore}>Continue Shopping</button>
                                 <p>Total: ${calculateTotalPrice()}</p>
-                                <button>Proceed to Checkout</button>
-                            </div>
+                                <StyledButton>Proceed to Checkout</StyledButton>
+                            </CartContainer>
                         )}
                     </div>
                 )}
             </div>
-        </main>
+        </Main>
     );
 };
 
 export default Cart;
+const Main = styled.main`
+background-color:skyblue;
+color: white;
+height:100vh;
+`;
+
+const CartContainer = styled.div`
+padding: 100px 50px;
+font-family: 'Franklin Gothic Medium';
+width:100vw;
+`;
+
+const StyledButton = styled.button`
+font-family: "Jersey 10", sans-serif;
+border: solid 2px;
+border-radius: 30px;
+background-color:skyblue;
+color:gold;
+font-size:24px;
+padding:20px;
+float:right;
+margin-right:10%;
+`

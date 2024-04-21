@@ -1,9 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
+import { useCart } from "../context/CartContext"
 
 const Products = () => {
   const [products, setProducts] = useState([]);
   const [error, setError] = useState('');
+
+  //to add to cart
+  const { dispatch } = useCart();
 
   // Fetching products
   useEffect(() => {
@@ -23,6 +27,11 @@ const Products = () => {
     fetchProducts();
   }, []);
 
+  //handlers
+  const addItemToCart = (item) => {
+    dispatch({type:"ADD_ITEM", payload: item._id});
+  }
+
   // JSX Template
   return (
     <ProductsContainer>
@@ -34,6 +43,8 @@ const Products = () => {
               <div className="bgImage" style={{ backgroundImage: `url(${product.imageSrc})` }}></div>
               <h1>{product.name}</h1>
               <p>{product.price}</p>
+
+              <button onClick={addItemToCart}>Add to Cart</button>
             </ProductItem>
           ))
         ) : (
