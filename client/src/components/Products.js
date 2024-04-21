@@ -67,8 +67,10 @@ const ProductsContainer = styled.div`
   .productTitle {
     text-align: center;
     color: #27282b;
-    font-size: 50px;
-    font-family: 'Poppins', sans-serif;
+    font-size: 80px;
+    font-family: "Jersey 10", sans-serif;
+      font-weight: 400;
+      font-style: normal;
   }
 
   .productList {
@@ -121,7 +123,9 @@ const ProductItem = styled.div`
   h1 {
     font-size: 25px;
     margin-top: 20px;
-    font-family: 'Poppins', sans-serif;
+    font-family: "MedievalSharp", cursive;
+  font-weight: 400;
+  font-style: normal;
   }
 
   p {

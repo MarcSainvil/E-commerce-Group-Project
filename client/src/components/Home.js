@@ -24,6 +24,7 @@ const HomeContainer = styled.div`
   color: gold;
 
   .hero {
+    margin-top: 10px;
     width: 100%;
     height: calc(50vh - 100px);
     display: flex;
