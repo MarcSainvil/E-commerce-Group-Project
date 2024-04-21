@@ -37,26 +37,36 @@ const Cart = () => {
     };
 
     const calculateTotalPrice = () => {
-        return cart.reduce((total, item) => total + item.price * item.quantity, 0).toFixed(2);
+        return cart.reduce((total, item) => {
+            // Remove the currency symbol and parse the price string into a float
+            const price = parseFloat(item.price.replace('$', ''));
+            const quantity = parseInt(item.quantity);
+            if (!isNaN(price) && !isNaN(quantity)) {
+                return total + (price * quantity);
+            } else {
+                console.error('Invalid price or quantity:', item);
+                return total;
+            }
+        }, 0).toFixed(2);
     };
 
 
 //show on web
     return(
-        <main>
+        <Main>
         <div>
                 {isLoading ? (
                     <p>Loading...</p>
                 ) : (
                     <div>
                         {cart.length === 0 ? (
-                            <div>
+                            <CartContainer>
                                 <h2>Your cart is empty now!</h2>
                                 <p>Dive in our TROVE, get what you like! </p>
-                                <button onClick={handleAddMore}>Go Shopping</button>
-                            </div>
+                                <StyledButton onClick={handleAddMore}>Go Shopping</StyledButton>
+                            </CartContainer>
                         ) : (
-                            <div>
+                            <CartContainer>
                                 <ul>
                                     {cart.map((product) => {
                                         console.log(product._id); 
@@ -66,21 +76,21 @@ const Cart = () => {
                                             <CartItem product={product} />
                                         </li>
                                         );
-                                   })}
+                                })}
                                 </ul>
 
-                                <button onClick={handleAddMore}>Continue Shopping</button>
+                                <StyledButton onClick={handleAddMore}>Continue Shopping</StyledButton>
 
                                 <p>Total: ${calculateTotalPrice()}</p>
 
-                                <button>Proceed to Checkout</button>
-                            </div>
+                                <StyledButton>Proceed to Checkout</StyledButton>
+                            </CartContainer>
                         )}
                     </div>
                 )}
             </div>
 
-        </main>
+        </Main>
     )
 };
 

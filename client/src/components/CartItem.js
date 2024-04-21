@@ -14,9 +14,9 @@ const CartItem = ({ product }) => {
     };
 
     return (
-    <div>
-        <img src={product.imageSrc} alt={product.name} />
-        <p>{product.name} - ${product.price}</p>
+    <div style={{ backgroundImage: `url(${product.imageSrc})` }}>
+        
+        <p>{product.name} - {product.price}</p>
         <input type="number" value={product.quantity} onChange={handleQuantityChange} />
         <button onClick={handleRemoveItem}>Remove</button>
     </div>
@@ -24,3 +24,5 @@ const CartItem = ({ product }) => {
     };
 
 export default CartItem;
+
+//<img src={product.imageSrc} alt={product.name} />
