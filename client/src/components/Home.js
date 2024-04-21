@@ -5,7 +5,7 @@ const Home = () => {
   return (
     <HomeContainer>
       <div className='hero'>
-        <h2>Hello, WELCOME TO TECH TROVE</h2>
+        <h2>WELCOME TO TECH TROVE!</h2>
         <div className='prompt'>
           <p>
           
@@ -24,6 +24,7 @@ const HomeContainer = styled.div`
   color: gold;
 
   .hero {
+    margin-top: 10px;
     width: 100%;
     height: calc(50vh - 100px);
     display: flex;
