@@ -18,6 +18,7 @@ const Cart = () => {
                 }
                 const data = await response.json();
                 dispatch({ type: 'SET_CART', payload: data });
+                console.log(data);
                 setIsLoading(false);
             } catch (error) {
                 console.error('Error fetching cart:', error);
