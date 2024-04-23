@@ -5,14 +5,8 @@ import styled from 'styled-components';
 const Home = () => {
   return (
     <HomeContainer>
-      <div className='hero'>
+      <div className='home'>
         <h2>WELCOME TO TECH TROVE!</h2>
-        <div className='prompt'>
-          <p>
-          
-          </p>
-      </div>
-      
       </div>
     </HomeContainer>
   );
@@ -21,10 +15,9 @@ const Home = () => {
 const HomeContainer = styled.div`
   width: 100%;
   align-items: center;
-  font-family: 'Poppins', sans-serif;
   color: gold;
 
-  .hero {
+  .home {
     margin-top: 10px;
     width: 100%;
     height: calc(50vh - 100px);
@@ -47,17 +40,6 @@ const HomeContainer = styled.div`
       margin-top: 50px;
       @media (max-width: 800px){ 
         font-size: 50px;
-      }
-    }
-
-    .prompt {
-      width: 40%;
-      font-size: 30px;
-
-      svg {
-        font-size: 60px;
-        margin: 5px;
-        color: white;
       }
     }
   }

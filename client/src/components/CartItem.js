@@ -18,7 +18,6 @@ const CartItem = ({ product }) => {
     // Component layout
     return (
         <div>
-            <img src={product.imageSrc} />
             <p>{product.name} - {product.price}</p>
             <input type="number" value={product.quantity} onChange={handleQuantityChange} />
             <button onClick={handleRemoveItem}>Remove</button>
