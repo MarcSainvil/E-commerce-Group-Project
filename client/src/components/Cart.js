@@ -80,22 +80,25 @@ const Cart = () => {
                     <div>
                         {cart.length === 0 ? (
                             <CartContainer>
-                                <h2>Your cart is empty now!</h2>
-                                <p>Dive in our TROVE, get what you like!</p>
-                                <StyledButton onClick={handleAddMore}>Go Shopping →</StyledButton>
+                                <StyleHead>Your cart is empty now!</StyleHead>
+                                <StyleP>Dive in our TROVE, get what you like!</StyleP>
+                                <StyledButtontwo onClick={handleAddMore}>Go Shopping →</StyledButtontwo>
                             </CartContainer>
                         ) : (
                             <CartContainer>
-                                <ul>
+                            <StyleHead>Your cart:</StyleHead>
+                            
+                                <List>
                                     {cart.map((product) => (
-                                        <li key={product._id}>
+                                        <List key={product._id}>
                                             <CartItem product={product} />
-                                        </li>
+                                            <DashedLine></DashedLine>
+                                        </List>
                                     ))}
-                                </ul>
-                                <StyledButton onClick={handleAddMore}>Continue Shopping</StyledButton>
-                                <p>Total: ${calculateTotalPrice()}</p>
-                                <StyledButton onClick={handleCheckout}>Proceed to Checkout</StyledButton>
+                                </List>
+                                <StyledButtontwo onClick={handleAddMore}>Continue Shopping </StyledButtontwo>
+                                <Total>Total: ${calculateTotalPrice()}</Total>
+                                <StyledButtontwo onClick={handleCheckout}>Proceed to Checkout</StyledButtontwo>
                             </CartContainer>
                         )}
                     </div>
@@ -117,7 +120,30 @@ const CartContainer = styled.div`
     width: 100vw;
 `;
 
-const StyledButton = styled.button`
+const List = styled.ul`
+list-style-type: style none;
+font-size:20px;
+`;
+
+const StyleHead = styled.h2`
+font-size:48px;
+`;
+
+const StyleP = styled.p`
+font-size:20px;
+`;
+
+const DashedLine = styled.p`
+border-top: 3px dashed white;
+width:40vw;
+`;
+
+const Total = styled.p`
+font-size:32px;
+margin-top:150px;
+`;
+
+const StyledButtontwo = styled.button`
     font-family: "Jersey 10", sans-serif;
     border: solid 2px;
     border-radius: 30px;
@@ -125,8 +151,7 @@ const StyledButton = styled.button`
     color: gold;
     font-size: 24px;
     padding: 20px;
-    float: right;
-    margin-right: 10%;
+    margin-top:20px;
 `;
 
 export default Cart;
